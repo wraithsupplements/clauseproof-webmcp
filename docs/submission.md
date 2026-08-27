@@ -8,7 +8,7 @@
 - **License:** MIT
 - **Live app:** `https://clauseproof-webmcp.netlify.app`
 - **Repository:** `https://github.com/wraithsupplements/clauseproof-webmcp`
-- **Video:** pending live integration proof
+- **Video:** validated local release artifact; public YouTube URL pending
 
 ## What it does
 
@@ -33,7 +33,7 @@ Every tool has a closed JSON schema, explicit side-effect language, and a result
 
 ### Xano
 
-Xano is the durable backend, not a badge. The checked-in XanoScript defines the case, audit-event, and evidence-receipt data models; an idempotent synthetic-case bootstrap; bounded case and audit APIs; and a workflow contract test. Uploaded document bytes and extracted text remain in the browser. The repository includes a disposable official-parser validation command, and every Xano file must pass before a dry-run or live push.
+Xano is the durable backend, not a badge. The checked-in XanoScript defines the case, audit-event, and evidence-receipt data models; an idempotent synthetic-case bootstrap; bounded case and audit APIs; and a workflow contract test. The three tables and five endpoints are deployed on Xano's free plan. The workflow test is checked in and parser-validated but is not live-deployed because workflow tests are unavailable on that plan. Uploaded document bytes and extracted text remain in the browser. The repository includes a disposable official-parser validation command, and every Xano file must pass before a dry-run or live push.
 
 ### SerpApi
 
@@ -59,6 +59,7 @@ The hardest part was making agent actions useful without letting fluent language
 - Local OCR that keeps uploaded bytes out of the public backend.
 - Checked-in, officially parsed Xano backend source.
 - Live structured SerpApi evidence through a server-side route.
+- A live Xano release receipt covering health, idempotent bootstrap, case readback, audit append, and nine SerpApi organic results.
 
 ## What we learned
 
@@ -72,8 +73,9 @@ Add authenticated private rooms, versioned redlines, provider-backed PDF generat
 
 - [x] Public app returns HTTP 200 without Netlify login.
 - [ ] HTTPS browser registers all six WebMCP tools.
-- [ ] Xano health, bootstrap, audit, case, and SerpApi evidence endpoints return live receipts.
-- [ ] Public GitHub repository has the MIT license, source, setup instructions, and submission-window history.
+- [x] Xano health, bootstrap, audit, case, and SerpApi evidence endpoints return live receipts.
+- [x] Public GitHub repository has the MIT license, source, setup instructions, and submission-window history.
+- [x] Local video artifact is 110.625 seconds, 1920x1080 H.264, with AAC audio.
 - [ ] Public YouTube video is under three minutes, has audio, and demonstrates the live app.
 - [ ] OpenAI WebMCP Challenge submission receipt captured.
 - [ ] DevNetwork API/Cloud/AI submission receipt captured for Xano and SerpApi tracks only.
