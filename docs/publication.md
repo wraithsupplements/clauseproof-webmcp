@@ -67,10 +67,16 @@ SerpApi improves the AI experience because the human and agent can reason from t
 - Live app: https://clauseproof-webmcp.netlify.app
 - Public source: https://github.com/wraithsupplements/clauseproof-webmcp
 - License: MIT
-- Video: pending public YouTube receipt
+- Video: https://youtu.be/cs7cA7nX_8g
 - Entrant: Cody Peacock, individual
 - Data: synthetic demonstration agreement and counterparty
 - Xano live state: three tables and five endpoints
 - Xano checked-in state: workflow test included and parser-validated, not live-deployed on Free Plan
 - SerpApi live proof: nine organic results, evidence receipt 1
 - Signature state: prepared receipt only; not sent and not signed
+
+## Submission receipts
+
+- YouTube: public video https://youtu.be/cs7cA7nX_8g (`Video published`, August 27, 2026)
+- OpenAI WebMCP Challenge: submission `1156458`, public project https://devpost.com/software/clauseproof (`Project submitted!`)
+- DevNetwork Xano and SerpApi tracks: pending registration and terminal submission receipt
