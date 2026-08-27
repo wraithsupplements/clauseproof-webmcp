@@ -75,7 +75,7 @@ Add authenticated private rooms, versioned redlines, provider-backed PDF generat
 - [ ] HTTPS browser registers all six WebMCP tools.
 - [x] Xano health, bootstrap, audit, case, and SerpApi evidence endpoints return live receipts.
 - [x] Public GitHub repository has the MIT license, source, setup instructions, and submission-window history.
-- [x] Local video artifact is 110.625 seconds, 1920x1080 H.264, with AAC audio.
+- [x] Local video artifact is 135.944 seconds, 1920x1080 H.264, with AAC audio.
 - [ ] Public YouTube video is under three minutes, has audio, and demonstrates the live app.
 - [ ] OpenAI WebMCP Challenge submission receipt captured.
 - [ ] DevNetwork API/Cloud/AI submission receipt captured for Xano and SerpApi tracks only.

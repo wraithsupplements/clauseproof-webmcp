@@ -61,6 +61,7 @@ SCENES = [
         "voice": (
             "Contracts do not fail because nobody summarized them. They fail because risk, authority, and action get blurred together. "
             "ClauseProof is a shared decision room where a human and an AI agent can inspect the same evidence, but only the human can approve what happens next."
+            " The demonstration case is synthetic, while the workflow, safety gates, and receipts are the same states exposed by the live product."
         ),
         "kind": "overview",
     },
@@ -79,6 +80,7 @@ SCENES = [
         "voice": (
             "The page registers six narrow WebMCP tools. An agent can read the case, list risks, and propose revised language inside the product's real state. "
             "Every input schema is closed, every effect is described, and a proposal is recorded as a proposal, never as approval."
+            " Read tools are separated from proposal and gated mutation tools, so capability and authority remain reviewable in both code and product state."
         ),
         "kind": "tools",
     },
@@ -97,6 +99,7 @@ SCENES = [
         "voice": (
             "Xano is the durable case and receipt backend. The checked in XanoScript defines three tables, five live endpoints, an idempotent bootstrap, and a reviewable workflow test. "
             "SerpApi runs server side through Xano for one bounded counterparty query. The live proof returned nine organic results and receipt one, while the key stayed server side."
+            " The public browser receives only structured evidence and opaque receipt identifiers; it never receives the provider credential or uploaded contract bytes."
         ),
         "kind": "backend",
     },
