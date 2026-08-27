@@ -68,6 +68,7 @@ SerpApi improves the AI experience because the human and agent can reason from t
 - Public source: https://github.com/wraithsupplements/clauseproof-webmcp
 - License: MIT
 - Video: https://youtu.be/cs7cA7nX_8g
+- Downloadable video backup: https://github.com/wraithsupplements/clauseproof-webmcp/releases/download/demo-video-2026-08-27/clauseproof-demo.mp4
 - Entrant: Cody Peacock, individual
 - Data: synthetic demonstration agreement and counterparty
 - Xano live state: three tables and five endpoints
@@ -79,4 +80,4 @@ SerpApi improves the AI experience because the human and agent can reason from t
 
 - YouTube: public video https://youtu.be/cs7cA7nX_8g (`Video published`, August 27, 2026)
 - OpenAI WebMCP Challenge: submission `1156458`, public project https://devpost.com/software/clauseproof (`Project submitted!`)
-- DevNetwork Xano and SerpApi tracks: registration proven; draft `1156478` created; terminal submission receipt pending after the in-app project editor crashed
+- DevNetwork Xano and SerpApi tracks: submission `1156487`, public project https://devpost.com/software/clauseproof (`Project submitted!`); exactly `SerpApi – Best AI Use Case` and `Xano: Rebuild a SaaS Tool You Hate` selected

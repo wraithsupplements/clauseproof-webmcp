@@ -78,4 +78,4 @@ Add authenticated private rooms, versioned redlines, provider-backed PDF generat
 - [x] Local video artifact is 135.944 seconds, 1920x1080 H.264, with AAC audio.
 - [x] Public YouTube video is under three minutes, has audio, and demonstrates the live app: https://youtu.be/cs7cA7nX_8g
 - [x] OpenAI WebMCP Challenge submission receipt captured: submission `1156458`, public project https://devpost.com/software/clauseproof
-- [ ] DevNetwork API/Cloud/AI submission receipt captured for Xano and SerpApi tracks only. Registration is proven and draft `1156478` exists; terminal submission remains pending.
+- [x] DevNetwork API/Cloud/AI submission receipt captured for Xano and SerpApi tracks only: submission `1156487`, public project https://devpost.com/software/clauseproof
