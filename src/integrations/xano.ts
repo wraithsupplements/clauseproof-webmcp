@@ -30,6 +30,15 @@ export function isXanoConfigured() {
   return Boolean(apiBase);
 }
 
+export async function ensureDemoCase() {
+  if (!apiBase) return { configured: false as const };
+  const result = await xanoRequest<{ case_key: string; created: boolean; synthetic_only: true }>("/demo/bootstrap", {
+    method: "POST",
+    body: "{}",
+  });
+  return { configured: true as const, ...result };
+}
+
 export async function recordAuditReceipt(caseKey: string, event: AuditEvent) {
   if (!apiBase) return { recorded: false, reason: "not-configured" as const };
   return xanoRequest<{ receipt_id: number; recorded: true }>("/audit", {

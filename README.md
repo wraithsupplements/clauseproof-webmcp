@@ -44,9 +44,10 @@ Open `http://localhost:4173`. Site tools require a WebMCP-capable browser; the h
 npm test
 npm run typecheck
 npm run build
+./tools/validate_xano.sh
 ```
 
-The checked-in Xano source is under `xano/`. It contains three tables, three functional endpoints plus health, and a workflow contract test. Before any live Xano push, preview it:
+The checked-in Xano source is under `xano/`. It contains three tables, an idempotent synthetic-case bootstrap, three functional endpoints plus health, and a workflow contract test. `validate_xano.sh` installs Xano's pinned parser into a disposable temporary directory, validates every `.xs` file, and removes the parser again so its dependency advisories never enter the app lockfile. Before any live Xano push, preview it:
 
 ```bash
 npx --yes @xano/cli@1.2.0 workspace push --directory ./xano --dry-run

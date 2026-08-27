@@ -1,9 +1,9 @@
-import { useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import { SeverityPill } from "./components/SeverityPill";
 import { clauseProofStore, useProofCase } from "./domain/store";
 import type { Finding } from "./domain/types";
 import { readDocument } from "./document/readDocument";
-import { fetchCounterpartyEvidence, isXanoConfigured } from "./integrations/xano";
+import { ensureDemoCase, fetchCounterpartyEvidence, isXanoConfigured } from "./integrations/xano";
 
 function FindingCard({ finding }: { finding: Finding }) {
   return (
@@ -39,6 +39,7 @@ export default function App() {
   const [approvalNote, setApprovalNote] = useState("Reviewed the source clauses and recorded each material risk decision.");
   const [approvalConfirmation, setApprovalConfirmation] = useState("");
   const [evidenceBusy, setEvidenceBusy] = useState(false);
+  const [backendStatus, setBackendStatus] = useState(isXanoConfigured() ? "connecting" : "browser-only");
   const selected = currentCase.findings.find((finding) => finding.id === selectedFinding) ?? currentCase.findings[0];
   const openRisks = currentCase.findings.filter((finding) => finding.status === "open");
   const critical = openRisks.filter((finding) => finding.severity === "critical").length;
@@ -46,6 +47,13 @@ export default function App() {
     if (finding.status !== "open") return total;
     return total + ({ critical: 28, high: 18, medium: 10, low: 4 } as const)[finding.severity];
   }, 0)), [currentCase.findings]);
+
+  useEffect(() => {
+    if (!isXanoConfigured()) return;
+    void ensureDemoCase()
+      .then((result) => setBackendStatus(result.configured ? "durable" : "browser-only"))
+      .catch(() => setBackendStatus("unavailable"));
+  }, []);
 
   async function chooseFile(file?: File) {
     if (!file) return;
@@ -91,7 +99,7 @@ export default function App() {
         </div>
         <div className="agent-status">
           <i className={webmcpStatus === "available" ? "status-live" : ""} />
-          <div><strong>Agent interface</strong><span>{webmcpStatus}</span></div>
+          <div><strong>Agent interface</strong><span>{webmcpStatus} · {backendStatus}</span></div>
         </div>
       </aside>
 
