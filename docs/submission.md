@@ -6,8 +6,8 @@
 - **Tagline:** Know before you sign.
 - **One sentence:** ClauseProof turns a high-stakes agreement into a source-grounded, human-approved decision room that an AI agent can safely operate through WebMCP.
 - **License:** MIT
-- **Live app:** `https://clauseproof-webmcp.netlify.app` (must return public HTTP 200 before submission)
-- **Repository:** pending correct GitHub owner
+- **Live app:** `https://clauseproof-webmcp.netlify.app`
+- **Repository:** `https://github.com/wraithsupplements/clauseproof-webmcp`
 - **Video:** pending live integration proof
 
 ## What it does
@@ -70,7 +70,7 @@ Add authenticated private rooms, versioned redlines, provider-backed PDF generat
 
 ## Final receipt checklist
 
-- [ ] Public app returns HTTP 200 without Netlify login.
+- [x] Public app returns HTTP 200 without Netlify login.
 - [ ] HTTPS browser registers all six WebMCP tools.
 - [ ] Xano health, bootstrap, audit, case, and SerpApi evidence endpoints return live receipts.
 - [ ] Public GitHub repository has the MIT license, source, setup instructions, and submission-window history.

@@ -4,6 +4,12 @@ ClauseProof turns high-stakes document packets into evidence-backed, human-appro
 
 Built from scratch during the OpenAI WebMCP Challenge submission period beginning August 25, 2026.
 
+## Live demo
+
+[Open ClauseProof](https://clauseproof-webmcp.netlify.app) · [Public source](https://github.com/wraithsupplements/clauseproof-webmcp)
+
+The public deployment uses only the synthetic demonstration agreement. Live Xano and SerpApi capabilities appear only after their server-side deployment variables are configured.
+
 ## Core workflow
 
 1. Read text PDFs locally through their text layer; use local OCR only for image documents.
