@@ -7,3 +7,6 @@ coverage/
 .DS_Store
 *.log
 *.tsbuildinfo
+
+# Local Netlify folder
+.netlify
