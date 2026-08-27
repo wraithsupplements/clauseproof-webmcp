@@ -79,4 +79,4 @@ SerpApi improves the AI experience because the human and agent can reason from t
 
 - YouTube: public video https://youtu.be/cs7cA7nX_8g (`Video published`, August 27, 2026)
 - OpenAI WebMCP Challenge: submission `1156458`, public project https://devpost.com/software/clauseproof (`Project submitted!`)
-- DevNetwork Xano and SerpApi tracks: pending registration and terminal submission receipt
+- DevNetwork Xano and SerpApi tracks: registration proven; draft `1156478` created; terminal submission receipt pending after the in-app project editor crashed
