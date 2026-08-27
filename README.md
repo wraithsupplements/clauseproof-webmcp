@@ -1,6 +1,6 @@
-# ProofRoom
+# ClauseProof
 
-ProofRoom turns high-stakes document packets into evidence-backed, human-approved decisions. A person and an AI agent work in the same live room: the interface shows exact source clauses and risks while WebMCP tools let the agent inspect, propose, and prepare reversible work without silently approving or signing anything.
+ClauseProof turns high-stakes document packets into evidence-backed, human-approved decisions. A person and an AI agent work in the same live room: the interface shows exact source clauses and risks while WebMCP tools let the agent inspect, propose, and prepare reversible work without silently approving or signing anything.
 
 Built from scratch during the OpenAI WebMCP Challenge submission period beginning August 25, 2026.
 
@@ -46,17 +46,27 @@ npm run typecheck
 npm run build
 ```
 
-## Sponsor integrations
+The checked-in Xano source is under `xano/`. It contains three tables, three functional endpoints plus health, and a workflow contract test. Before any live Xano push, preview it:
 
-The deterministic core is intentionally vendor-neutral. Server-side adapters will connect:
+```bash
+npx --yes @xano/cli@1.2.0 workspace push --directory ./xano --dry-run
+```
 
-- Xano for case state, workflows, and audit records.
-- SerpApi for live counterparty and claim verification.
-- Nutrient DWS for deterministic document processing and human review.
-- Doctavian for structured decision-document generation.
-- Foxit PDF Services and eSign for reversible PDF work and the human signature handoff.
+Do not use destructive Xano flags for this project. A normal schema/API push must remain transactional and additive.
 
-Credentials must remain server-side and are never committed or returned through WebMCP.
+## Live integrations
+
+- **Xano** owns durable synthetic case state, bounded audit receipts, and evidence receipts. Uploaded document bytes and extracted text stay in the browser.
+- **SerpApi** is called server-side by Xano for a fixed, bounded counterparty evidence query. The browser receives structured results, never the API key.
+- **OpenAI WebMCP** exposes the visible case workflow as six narrow site tools on the same page and session.
+
+Set the deployed frontend's `VITE_XANO_API_BASE` to the Xano API group URL ending in `/api:clauseproof-api-2026`.
+
+Additional document-generation or e-sign providers are deliberately not claimed until their live API calls and receipts are proven.
+
+## Privacy and action boundary
+
+The public demo uses a synthetic agreement. Credentials remain server-side and are never committed or returned through WebMCP. ClauseProof can prepare a local signature packet receipt only after exact human approval; it does not send a signature request or sign a document.
 
 ## License
 

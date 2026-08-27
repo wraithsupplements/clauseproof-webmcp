@@ -1,8 +1,9 @@
 import { useMemo, useRef, useState } from "react";
 import { SeverityPill } from "./components/SeverityPill";
-import { proofRoomStore, useProofCase } from "./domain/store";
+import { clauseProofStore, useProofCase } from "./domain/store";
 import type { Finding } from "./domain/types";
 import { readDocument } from "./document/readDocument";
+import { fetchCounterpartyEvidence, isXanoConfigured } from "./integrations/xano";
 
 function FindingCard({ finding }: { finding: Finding }) {
   return (
@@ -20,8 +21,8 @@ function FindingCard({ finding }: { finding: Finding }) {
       </div>
       {finding.status === "open" && (
         <div className="finding-actions">
-          <button onClick={() => proofRoomStore.setFindingStatus(finding.id, "resolved")}>Mark resolved</button>
-          <button className="button-quiet" onClick={() => proofRoomStore.setFindingStatus(finding.id, "accepted")}>Accept risk</button>
+          <button onClick={() => clauseProofStore.setFindingStatus(finding.id, "resolved")}>Mark resolved</button>
+          <button className="button-quiet" onClick={() => clauseProofStore.setFindingStatus(finding.id, "accepted")}>Accept risk</button>
         </div>
       )}
     </article>
@@ -37,6 +38,7 @@ export default function App() {
   const [approvalOpen, setApprovalOpen] = useState(false);
   const [approvalNote, setApprovalNote] = useState("Reviewed the source clauses and recorded each material risk decision.");
   const [approvalConfirmation, setApprovalConfirmation] = useState("");
+  const [evidenceBusy, setEvidenceBusy] = useState(false);
   const selected = currentCase.findings.find((finding) => finding.id === selectedFinding) ?? currentCase.findings[0];
   const openRisks = currentCase.findings.filter((finding) => finding.status === "open");
   const critical = openRisks.filter((finding) => finding.severity === "critical").length;
@@ -51,7 +53,7 @@ export default function App() {
     try {
       const text = await readDocument(file, (message, percent) => setUploadStatus(`${message}${percent === undefined ? "" : ` · ${percent}%`}`));
       if (text.length < 40) throw new Error("The extracted document did not contain enough readable text.");
-      proofRoomStore.replaceDocument(file.name, text);
+      clauseProofStore.replaceDocument(file.name, text);
       setSelectedFinding(null);
       setUploadStatus(`${file.name} analyzed locally. Original bytes were not sent anywhere.`);
     } catch (error) {
@@ -59,10 +61,24 @@ export default function App() {
     }
   }
 
+  async function runEvidenceCheck() {
+    setEvidenceBusy(true);
+    setUploadStatus(`Checking ${currentCase.counterparty} through the live Xano → SerpApi evidence route…`);
+    try {
+      const { receiptId, sources } = await fetchCounterpartyEvidence(currentCase.id);
+      clauseProofStore.addEvidence(sources, receiptId);
+      setUploadStatus(`Live evidence receipt ${receiptId} recorded with ${sources.length} structured result${sources.length === 1 ? "" : "s"}.`);
+    } catch (error) {
+      setUploadStatus(error instanceof Error ? error.message : "The live evidence check failed.");
+    } finally {
+      setEvidenceBusy(false);
+    }
+  }
+
   return (
     <div className="app-shell">
       <aside className="sidebar">
-        <div className="brand"><span className="brand-mark">P</span><strong>ProofRoom</strong></div>
+        <div className="brand"><span className="brand-mark">C</span><strong>ClauseProof</strong></div>
         <nav>
           <a className="nav-active" href="#case"><span>01</span>Current case</a>
           <a href="#evidence"><span>02</span>Evidence</a>
@@ -90,7 +106,7 @@ export default function App() {
               className="button-primary"
               onClick={() => {
                 try {
-                  proofRoomStore.prepareSignaturePacket();
+                  clauseProofStore.prepareSignaturePacket();
                 } catch (error) {
                   setUploadStatus(error instanceof Error ? error.message : "Approval required.");
                 }
@@ -108,7 +124,7 @@ export default function App() {
           <div className="metrics">
             <article><span>Open risks</span><strong>{openRisks.length}</strong><small>{critical} critical</small></article>
             <article><span>Clauses extracted</span><strong>{currentCase.clauses.length}</strong><small>deterministic</small></article>
-            <article><span>Evidence checks</span><strong>{currentCase.evidence.length}</strong><small>pending live search</small></article>
+            <article className="evidence-metric"><span>Evidence checks</span><strong>{currentCase.evidence.length}</strong><button disabled={evidenceBusy || !isXanoConfigured()} onClick={() => void runEvidenceCheck()}>{evidenceBusy ? "Checking…" : "Run live check"}</button></article>
             <article><span>Human decision</span><strong>{currentCase.status === "review" ? "Required" : "Recorded"}</strong><small>never inferred</small></article>
           </div>
         </section>
@@ -136,7 +152,7 @@ export default function App() {
                   disabled={critical > 0 || approvalConfirmation !== `APPROVE ${currentCase.id}` || approvalNote.trim().length < 8}
                   onClick={() => {
                     try {
-                      proofRoomStore.approve(approvalNote.trim(), approvalConfirmation);
+                      clauseProofStore.approve(approvalNote.trim(), approvalConfirmation);
                       setUploadStatus("Human approval recorded. Signature preparation is now available, but nothing has been sent or signed.");
                       setApprovalOpen(false);
                     } catch (error) {
@@ -181,6 +197,19 @@ export default function App() {
             </ol>
           </div>
         </section>
+
+        {currentCase.evidence.length > 0 && (
+          <section className="panel evidence-panel" id="evidence">
+            <div className="panel-heading"><div><span className="eyebrow">Live structured search</span><h2>Counterparty evidence</h2></div><span>via Xano + SerpApi</span></div>
+            <div className="evidence-grid">
+              {currentCase.evidence.map((source) => (
+                <a key={source.id} href={source.url} target="_blank" rel="noreferrer">
+                  <span>{source.publisher}</span><strong>{source.title}</strong><p>{source.supports}</p>
+                </a>
+              ))}
+            </div>
+          </section>
+        )}
       </main>
     </div>
   );

@@ -1,15 +1,15 @@
 import { beforeEach, describe, expect, it } from "vitest";
 import { makeSampleCase } from "../src/domain/sample";
-import { proofRoomStore } from "../src/domain/store";
-import { registerProofRoomTools } from "../src/webmcp/register";
+import { clauseProofStore } from "../src/domain/store";
+import { registerClauseProofTools } from "../src/webmcp/register";
 import type { ToolDefinition } from "../src/webmcp/types";
 
 describe("WebMCP registration", () => {
-  beforeEach(() => proofRoomStore.reset(makeSampleCase()));
+  beforeEach(() => clauseProofStore.reset(makeSampleCase()));
 
   it("registers a narrow, inspectable tool surface", async () => {
     const registered: ToolDefinition[] = [];
-    const result = await registerProofRoomTools({ registerTool: (tool) => { registered.push(tool); } });
+    const result = await registerClauseProofTools({ registerTool: (tool) => { registered.push(tool); } });
     expect(result.supported).toBe(true);
     expect(result.registered).toEqual([
       "get_case_summary",
@@ -24,7 +24,7 @@ describe("WebMCP registration", () => {
 
   it("returns verifiable state and records proposals without approval", async () => {
     const registered = new Map<string, ToolDefinition>();
-    await registerProofRoomTools({ registerTool: (tool) => { registered.set(tool.name, tool); } });
+    await registerClauseProofTools({ registerTool: (tool) => { registered.set(tool.name, tool); } });
     const summary = await registered.get("get_case_summary")!.execute({}) as { openRiskCount: number };
     expect(summary.openRiskCount).toBeGreaterThan(0);
     const result = await registered.get("propose_risk_resolution")!.execute({
@@ -33,7 +33,6 @@ describe("WebMCP registration", () => {
     }) as { caseApproved: boolean; sourceDocumentChanged: boolean };
     expect(result.caseApproved).toBe(false);
     expect(result.sourceDocumentChanged).toBe(false);
-    expect(proofRoomStore.getSnapshot().audit.at(-1)?.outcome).toBe("proposed");
+    expect(clauseProofStore.getSnapshot().audit.at(-1)?.outcome).toBe("proposed");
   });
 });
-

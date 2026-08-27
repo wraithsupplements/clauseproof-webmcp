@@ -2,7 +2,7 @@ import { StrictMode } from "react";
 import { createRoot } from "react-dom/client";
 import App from "./App";
 import "./styles.css";
-import { registerProofRoomTools } from "./webmcp/register";
+import { registerClauseProofTools } from "./webmcp/register";
 
 createRoot(document.getElementById("root")!).render(
   <StrictMode>
@@ -10,5 +10,4 @@ createRoot(document.getElementById("root")!).render(
   </StrictMode>,
 );
 
-void registerProofRoomTools();
-
+void registerClauseProofTools();

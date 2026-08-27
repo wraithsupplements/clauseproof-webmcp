@@ -1,7 +1,8 @@
 import { useSyncExternalStore } from "react";
 import { extractClauses, generateFindings } from "./analyze";
 import { makeSampleCase } from "./sample";
-import type { AuditEvent, CaseSummary, Finding, ProofCase } from "./types";
+import { recordAuditReceipt } from "../integrations/xano";
+import type { AuditEvent, CaseSummary, EvidenceSource, Finding, ProofCase } from "./types";
 
 type Listener = () => void;
 
@@ -15,7 +16,7 @@ function audit(action: string, actor: AuditEvent["actor"], outcome: AuditEvent["
   return { id: eventId(), at: new Date().toISOString(), action, actor, outcome, detail };
 }
 
-class ProofRoomStore {
+class ClauseProofStore {
   private current: ProofCase = makeSampleCase();
   private listeners = new Set<Listener>();
 
@@ -27,8 +28,13 @@ class ProofRoomStore {
   getSnapshot = () => this.current;
 
   private set(next: ProofCase) {
+    const previousEventId = this.current.audit.at(-1)?.id;
     this.current = next;
     this.listeners.forEach((listener) => listener());
+    const latest = next.audit.at(-1);
+    if (latest && latest.id !== previousEventId) {
+      void recordAuditReceipt(next.id, latest).catch(() => undefined);
+    }
   }
 
   reset(next = makeSampleCase()) {
@@ -107,6 +113,23 @@ class ProofRoomStore {
     });
   }
 
+  addEvidence(sources: EvidenceSource[], receiptId: number) {
+    if (sources.length === 0) throw new Error("The live search returned no usable evidence sources.");
+    const existing = new Set(this.current.evidence.map((source) => source.url));
+    const additions = sources.filter((source) => !existing.has(source.url));
+    this.set({
+      ...this.current,
+      evidence: [...this.current.evidence, ...additions],
+      updatedAt: new Date().toISOString(),
+      audit: [...this.current.audit, audit(
+        "evidence.counterparty_checked",
+        "integration",
+        "completed",
+        `SerpApi receipt ${receiptId} added ${additions.length} new source${additions.length === 1 ? "" : "s"}.`,
+      )],
+    });
+  }
+
   approve(note: string, confirmationText: string) {
     const expected = `APPROVE ${this.current.id}`;
     if (confirmationText !== expected) {
@@ -163,9 +186,8 @@ class ProofRoomStore {
   }
 }
 
-export const proofRoomStore = new ProofRoomStore();
+export const clauseProofStore = new ClauseProofStore();
 
 export function useProofCase() {
-  return useSyncExternalStore(proofRoomStore.subscribe, proofRoomStore.getSnapshot);
+  return useSyncExternalStore(clauseProofStore.subscribe, clauseProofStore.getSnapshot);
 }
-
